@@ -1,82 +1,72 @@
-import React, { useState } from 'react';
-import Dashboard from './Dashboard';
-import DoctorList from './DoctorList';
-import AddDoctorForm from './AddDoctorForm';
-const AdminSidebar = () => {
-  const [activePage, setActivePage] = useState('Appointments'); // Default page
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import {
+  Home,
+  Users,
+  Calendar,
+  Clock,
+  Building2,
+  Stethoscope,
+  DollarSign,
+  MessageSquare,
+  FileText,
+  Settings,
+  LogOut,
+} from 'lucide-react';
 
-  const styles = {
-    container: {
-      display: 'flex',
-      height: '100vh',
-    },
-    navbar: {
-      width: '200px',
-      height: '100%',
-      backgroundColor: '#f0faff', // Light blue background
-      padding: '20px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      gap: '20px', // Space between items
-      boxShadow: '2px 0 5px rgba(0, 0, 0, 0.1)',
-      fontFamily: 'Arial, sans-serif',
-    },
-    link: {
-      fontSize: '16px',
-      color: '#2196F3', // Blue color
-      textDecoration: 'none',
-      fontWeight: '500',
-      cursor: 'pointer',
-      transition: 'color 0.3s ease',
-    },
-    linkHover: {
-      color: '#1769aa', // Darker blue on hover
-    },
-    content: {
-      flex: 1,
-      padding: '20px',
-    },
-  };
+const Sidebar = () => {
+  const location = useLocation();
 
-  const renderContent = () => {
-    switch (activePage) {
-      case 'Dashboard':
-        return <Dashboard />; // Render the Dashboard component
-      case 'Doctor List':
-        return <DoctorList />;
-      case 'Add Doctor':
-        return <AddDoctorForm />;
-      case 'Logout':
-        return <h1>You have been logged out.</h1>;
-      default:
-        return <h1>Welcome!</h1>;
-    }
-  };
+  const menuItems = [
+    { title: 'Dashboard', icon: <Home className="w-5 h-5" />, path: '/' },
+    { title: 'Users Management', icon: <Users className="w-5 h-5" />, path: '/users-management' },
+    { title: 'Appointments', icon: <Calendar className="w-5 h-5" />, path: '/appointments' },
+    { title: 'Dentist Schedules', icon: <Clock className="w-5 h-5" />, path: '/dentist-schedules' },
+    { title: 'Clinics', icon: <Building2 className="w-5 h-5" />, path: '/clinics' },
+    { title: 'Services', icon: <Stethoscope className="w-5 h-5" />, path: '/services' },
+    { title: 'Payments', icon: <DollarSign className="w-5 h-5" />, path: '/payments' },
+    { title: 'Reviews and Feedback', icon: <MessageSquare className="w-5 h-5" />, path: '/reviews-feedback' },
+    { title: 'Medical Records', icon: <FileText className="w-5 h-5" />, path: '/medical-records' },
+    { title: 'Settings', icon: <Settings className="w-5 h-5" />, path: '/settings' },
+  ];
 
   return (
-    <div style={styles.container}>
-      {/* Navbar */}
-      <div style={styles.navbar}>
-        {['Dashboard', 'Doctor List', 'Add Doctor', 'Logout'].map((item) => (
-          <div
-            key={item}
-            style={styles.link}
-            onMouseEnter={(e) => (e.target.style.color = styles.linkHover.color)}
-            onMouseLeave={(e) => (e.target.style.color = styles.link.color)}
-            onClick={() => setActivePage(item)} // Update active page on click
-          >
-            {item}
-          </div>
-        ))}
+    <div className="w-64 h-screen bg-white shadow-lg flex flex-col">
+      {/* Admin Title */}
+      <div className="px-6 py-4">
+        <h1 className="text-xl font-bold text-gray-800">ADMIN</h1>
       </div>
 
-      {/* Content Area */}
-      <div style={styles.content}>
-        {renderContent()}
+      {/* Menu Items */}
+      <nav className="flex-1">
+        <ul className="space-y-1">
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <Link
+                to={item.path}
+                className={`flex items-center px-6 py-3 ${
+                  location.pathname === item.path
+                    ? 'bg-blue-50 text-blue-600'
+                    : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                } transition-colors`}
+              >
+                <span className="mr-3">{item.icon}</span>
+                <span className="text-sm font-medium">{item.title}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Logout Button */}
+      <div className="border-t border-gray-200">
+        <button className="w-full flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 transition-colors">
+          <LogOut className="w-5 h-5 mr-3" />
+          <span className="text-sm font-medium">LOGOUT</span>
+        </button>
       </div>
     </div>
   );
 };
 
-export default AdminSidebar;
+export default Sidebar;
